@@ -77,3 +77,17 @@ test('если стереть номер короче минимума, резу
   await user.clear(input)
   expect(screen.queryByRole('button', { name: /CAFFARO/ })).not.toBeInTheDocument()
 })
+
+test('крестик очищает поле и результаты, пока поле пустое его нет', async () => {
+  const user = setup()
+  const input = screen.getByRole('textbox')
+  expect(screen.queryByRole('button', { name: 'Очистить' })).not.toBeInTheDocument()
+
+  await user.type(input, '0189{Enter}')
+  await screen.findByRole('button', { name: /CAFFARO/ })
+
+  await user.click(screen.getByRole('button', { name: 'Очистить' }))
+  expect(input).toHaveValue('')
+  expect(screen.queryByRole('button', { name: /CAFFARO/ })).not.toBeInTheDocument()
+  expect(screen.queryByRole('button', { name: 'Очистить' })).not.toBeInTheDocument()
+})

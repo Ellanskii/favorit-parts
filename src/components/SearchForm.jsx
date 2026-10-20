@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchBrands, reset } from '../searchSlice'
 import useDebounce from '../useDebounce'
@@ -11,6 +11,7 @@ export default function SearchForm() {
   const { number: requested, brandsStatus } = useSelector((s) => s.search)
   const [value, setValue] = useState('')
   const debounced = useDebounce(value, DELAY)
+  const inputRef = useRef(null)
 
   // retry: после ошибки тот же номер можно отправить повторно (Enter)
   const send = (raw, retry = false) => {
@@ -25,10 +26,14 @@ export default function SearchForm() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounced])
 
-  const onChange = (e) => {
-    const next = e.target.value
+  const update = (next) => {
     setValue(next)
     if (next.trim().length < MIN_LENGTH && requested) dispatch(reset())
+  }
+
+  const clear = () => {
+    update('')
+    inputRef.current.focus()
   }
 
   const onSubmit = (e) => {
@@ -37,15 +42,23 @@ export default function SearchForm() {
   }
 
   return (
-    <form className="input-group mb-4" onSubmit={onSubmit}>
+    <form className="position-relative mb-4" onSubmit={onSubmit}>
       <input
-        className="form-control"
-        placeholder="Артикул, например 01089"
+        ref={inputRef}
+        className="form-control pe-5"
+        placeholder="Артикул, например 01089 (от 3 символов)"
         value={value}
-        onChange={onChange}
+        onChange={(e) => update(e.target.value)}
         autoFocus
       />
-      <button className="btn btn-primary">Найти</button>
+      {value && (
+        <button
+          type="button"
+          className="btn-close position-absolute top-50 end-0 translate-middle-y me-3"
+          aria-label="Очистить"
+          onClick={clear}
+        />
+      )}
     </form>
   )
 }
