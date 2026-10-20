@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchBrands, fetchOffers } from './searchSlice'
 import SearchForm from './components/SearchForm'
@@ -10,11 +11,24 @@ import Footer from './components/Footer'
 export default function App() {
   const dispatch = useDispatch()
   const s = useSelector((state) => state.search)
+  const resultsRef = useRef(null)
+  const scrollPending = useRef(false)
 
   const selectBrand = (brand) => {
     if (brand === s.selectedBrand && s.itemsStatus !== 'failed') return
+    scrollPending.current = true
     dispatch(fetchOffers({ number: s.number, brand }))
   }
+
+  // на мобильном длинный список брендов уводит таблицу за экран; крутим, когда данные уже пришли
+  useEffect(() => {
+    const el = resultsRef.current
+    if (!scrollPending.current || !el || s.itemsStatus === 'loading') return
+    scrollPending.current = false
+    if (el.getBoundingClientRect().top > window.innerHeight * 0.7) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [s.itemsStatus])
 
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -36,7 +50,11 @@ export default function App() {
             <p className="text-muted">Ничего не найдено</p>
           ))}
 
-        {s.itemsStatus !== 'idle' && <h2 className="h5 mt-4">Предложения и аналоги</h2>}
+        {s.itemsStatus !== 'idle' && (
+          <h2 ref={resultsRef} className="h5 mt-4" style={{ scrollMarginTop: 16 }}>
+            Предложения и аналоги
+          </h2>
+        )}
         {s.itemsStatus === 'loading' && <Loader />}
         {s.itemsStatus === 'failed' && (
           <ErrorAlert

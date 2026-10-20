@@ -40,8 +40,7 @@ export const fetchOffers = createAsyncThunk('search/fetchOffers', async ({ numbe
   flatten(await request({ number, brand, analogues: 'on' }))
 )
 
-const isStaleOffers = (state, { number, brand }) =>
-  number !== state.number || brand !== state.selectedBrand
+const isStaleOffers = (state, { number, brand }) => number !== state.number || brand !== state.selectedBrand
 
 const searchSlice = createSlice({
   name: 'search',

@@ -5,7 +5,15 @@ import { Provider } from 'react-redux'
 import { makeStore } from './store'
 import App from './App'
 
-const item = (goodsID, brand, name, price, count, extra = {}) => ({ goodsID, brand, name, number: '0189', price, count, ...extra })
+const item = (goodsID, brand, name, price, count, extra = {}) => ({
+  goodsID,
+  brand,
+  name,
+  number: '0189',
+  price,
+  count,
+  ...extra,
+})
 
 const answer = (goods) => Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({ goods }) })
 

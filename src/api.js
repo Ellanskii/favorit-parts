@@ -16,6 +16,7 @@ export async function request(params) {
   } catch {
     throw new Error('Нет связи с сервером')
   }
+  if (res.status === 429) throw new Error('Слишком много запросов, подождите пару секунд')
   if (!res.ok) throw new Error(`Сервер ответил с ошибкой ${res.status}`)
 
   const data = await res.json()

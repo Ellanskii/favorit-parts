@@ -67,7 +67,7 @@ export default function OffersTable({ items, brand }) {
                 return (
                   <Fragment key={item.goodsID}>
                     <tr
-                      className={item.brand === brand ? 'table-primary' : ''}
+                      className={item.brand === brand ? 'table-primary' : undefined}
                       style={expandable ? { cursor: 'pointer' } : undefined}
                       onClick={expandable ? toggle : undefined}
                       onKeyDown={
@@ -78,7 +78,7 @@ export default function OffersTable({ items, brand }) {
                       tabIndex={expandable ? 0 : undefined}
                       aria-expanded={expandable ? isOpen : undefined}
                     >
-                      <td>
+                      <td className="text-break">
                         {item.name}
                         <div className="text-muted small">
                           {item.brand} · {item.number}
