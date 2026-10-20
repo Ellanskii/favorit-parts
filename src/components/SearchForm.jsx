@@ -24,7 +24,6 @@ export default function SearchForm() {
 
   useEffect(() => {
     send(debounced)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounced])
 
   const update = (next) => {
