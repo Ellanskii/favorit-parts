@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useEffectEvent, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchBrands, reset } from '../searchSlice'
 import useDebounce from '../useDebounce'
@@ -22,8 +22,11 @@ export default function SearchForm() {
     dispatch(fetchBrands(number))
   }
 
+  // запускаем только по смене debounced, но с актуальным состоянием store
+  const onDebounced = useEffectEvent((raw) => send(raw))
+
   useEffect(() => {
-    send(debounced)
+    onDebounced(debounced)
   }, [debounced])
 
   const update = (next) => {

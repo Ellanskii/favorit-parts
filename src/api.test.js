@@ -2,7 +2,10 @@ import { afterEach, expect, test, vi } from 'vitest'
 import { request } from './api'
 
 const mockFetch = (body, ok = true) =>
-  vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({ ok, status: ok ? 200 : 502, json: () => Promise.resolve(body) })))
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(() => Promise.resolve({ ok, status: ok ? 200 : 502, json: () => Promise.resolve(body) }))
+  )
 
 afterEach(() => vi.unstubAllGlobals())
 
@@ -17,6 +20,9 @@ test('пустая позиция вместо результата даёт п�
 })
 
 test('сбой сети даёт понятную ошибку', async () => {
-  vi.stubGlobal('fetch', vi.fn(() => Promise.reject(new TypeError('Failed to fetch'))))
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(() => Promise.reject(new TypeError('Failed to fetch')))
+  )
   await expect(request({ number: '123' })).rejects.toThrow('Нет связи с сервером')
 })
