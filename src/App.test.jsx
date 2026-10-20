@@ -78,7 +78,7 @@ test('если стереть номер короче минимума, резу
   expect(screen.queryByRole('button', { name: /CAFFARO/ })).not.toBeInTheDocument()
 })
 
-test('Enter ищет и по короткому номеру, автопоиск — нет', async () => {
+test('кнопка «Найти» ищет и по короткому номеру, автопоиск — нет', async () => {
   const user = setup()
   const input = screen.getByRole('textbox')
 
@@ -86,7 +86,7 @@ test('Enter ищет и по короткому номеру, автопоиск
   await act(() => vi.advanceTimersByTimeAsync(1000))
   expect(fetchMock).not.toHaveBeenCalled()
 
-  await user.type(input, '{Enter}')
+  await user.click(screen.getByRole('button', { name: 'Найти' }))
   await screen.findByRole('button', { name: /CAFFARO/ })
   await user.type(input, ' ')
   await act(() => vi.advanceTimersByTimeAsync(1000))

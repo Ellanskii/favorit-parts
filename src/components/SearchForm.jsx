@@ -44,23 +44,26 @@ export default function SearchForm() {
   }
 
   return (
-    <form className="position-relative mb-4" onSubmit={onSubmit}>
-      <input
-        ref={inputRef}
-        className="form-control pe-5"
-        placeholder="Артикул, например 01089"
-        value={value}
-        onChange={(e) => update(e.target.value)}
-        autoFocus
-      />
-      {value && (
-        <button
-          type="button"
-          className="btn-close position-absolute top-50 end-0 translate-middle-y me-3"
-          aria-label="Очистить"
-          onClick={clear}
+    <form className="input-group mb-4" onSubmit={onSubmit}>
+      <div className="position-relative flex-grow-1">
+        <input
+          ref={inputRef}
+          className="form-control rounded-end-0 pe-5"
+          placeholder="Артикул, например 01089"
+          value={value}
+          onChange={(e) => update(e.target.value)}
+          autoFocus
         />
-      )}
+        {value && (
+          <button
+            type="button"
+            className="btn-close position-absolute top-50 end-0 translate-middle-y me-3"
+            aria-label="Очистить"
+            onClick={clear}
+          />
+        )}
+      </div>
+      <button className="btn btn-primary">Найти</button>
     </form>
   )
 }
