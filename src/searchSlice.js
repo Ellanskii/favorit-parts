@@ -25,8 +25,8 @@ function flatten(goods) {
   goods.forEach((g) => {
     ;[g, ...(g.analogues || [])].forEach((item) => {
       if (map.has(item.goodsID)) return
-      const { goodsID, brand, number, name, price, count } = item
-      map.set(goodsID, { goodsID, brand, number, name, price, count })
+      const { goodsID, brand, number, name, price, count, warehouses = [] } = item
+      map.set(goodsID, { goodsID, brand, number, name, price, count, warehouses })
     })
   })
   return [...map.values()]
