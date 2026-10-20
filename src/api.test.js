@@ -6,9 +6,9 @@ const mockFetch = (body, ok = true) =>
 
 afterEach(() => vi.unstubAllGlobals())
 
-test('ошибка из тела ответа превращается в исключение', async () => {
+test('ошибка из тела ответа превращается в исключение на русском', async () => {
   mockFetch({ error: 'Request quota exceeded!' })
-  await expect(request({ number: '123' })).rejects.toThrow('Request quota exceeded!')
+  await expect(request({ number: '123' })).rejects.toThrow('Превышен лимит запросов')
 })
 
 test('пустая позиция вместо результата даёт пустой список', async () => {
