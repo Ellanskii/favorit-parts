@@ -1,14 +1,14 @@
-const KEY = import.meta.env.VITE_API_KEY || '00000000-0000-0000-0000-000000000001'
-
 const ERRORS = {
   'Empty key!': 'Не указан ключ API',
   'Invalid key client!': 'Неверный ключ API',
+  'Invalid access key': 'Неверный ключ API',
   'Empty number goods!': 'Не указан артикул',
   'Request quota exceeded!': 'Превышен лимит запросов, попробуйте позже',
 }
 
+// ключ API подставляет прокси (vite в dev, nginx в проде), в браузер он не попадает
 export async function request(params) {
-  const query = new URLSearchParams({ key: KEY, ...params })
+  const query = new URLSearchParams(params)
 
   let res
   try {
