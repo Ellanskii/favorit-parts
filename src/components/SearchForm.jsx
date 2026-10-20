@@ -9,7 +9,7 @@ const DELAY = 500
 export default function SearchForm() {
   const dispatch = useDispatch()
   const { number: requested, brandsStatus } = useSelector((s) => s.search)
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState(requested)
   const debounced = useDebounce(value, DELAY)
   const inputRef = useRef(null)
 
