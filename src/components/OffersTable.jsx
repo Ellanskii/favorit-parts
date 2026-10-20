@@ -3,9 +3,6 @@ import { Fragment, useState } from 'react'
 const money = new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' })
 const day = new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'short', timeZone: 'Europe/Moscow' })
 
-// table-primary не адаптируется к тёмной теме, поэтому цвет из переменных темы
-const HIGHLIGHT = { '--bs-table-bg-type': 'var(--bs-primary-bg-subtle)' }
-
 const formatPrice = (price) => (price ? money.format(price) : '—')
 
 function nearestDate(warehouses) {
@@ -70,10 +67,8 @@ export default function OffersTable({ items, brand }) {
                 return (
                   <Fragment key={item.goodsID}>
                     <tr
-                      style={{
-                        ...(item.brand === brand && HIGHLIGHT),
-                        cursor: expandable ? 'pointer' : undefined,
-                      }}
+                      className={item.brand === brand ? 'table-primary' : undefined}
+                      style={expandable ? { cursor: 'pointer' } : undefined}
                       onClick={expandable ? toggle : undefined}
                       onKeyDown={
                         expandable
