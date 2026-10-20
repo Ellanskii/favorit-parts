@@ -13,11 +13,12 @@ export default function SearchForm() {
   const debounced = useDebounce(value, DELAY)
   const inputRef = useRef(null)
 
-  // retry: после ошибки тот же номер можно отправить повторно (Enter)
-  const send = (raw, retry = false) => {
+  // Enter ищет по любой длине, автопоиск только от MIN_LENGTH;
+  // retry: после ошибки тот же номер можно отправить повторно
+  const send = (raw, manual = false) => {
     const number = raw.trim()
-    if (number.length < MIN_LENGTH) return
-    if (number === requested && !(retry && brandsStatus === 'failed')) return
+    if (number.length < (manual ? 1 : MIN_LENGTH)) return
+    if (number === requested && !(manual && brandsStatus === 'failed')) return
     dispatch(fetchBrands(number))
   }
 
@@ -28,7 +29,8 @@ export default function SearchForm() {
 
   const update = (next) => {
     setValue(next)
-    if (next.trim().length < MIN_LENGTH && requested) dispatch(reset())
+    const number = next.trim()
+    if (number.length < MIN_LENGTH && number !== requested && requested) dispatch(reset())
   }
 
   const clear = () => {
@@ -46,7 +48,7 @@ export default function SearchForm() {
       <input
         ref={inputRef}
         className="form-control pe-5"
-        placeholder="Артикул, например 01089 (от 3 символов)"
+        placeholder="Артикул, например 01089"
         value={value}
         onChange={(e) => update(e.target.value)}
         autoFocus

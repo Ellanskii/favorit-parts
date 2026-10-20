@@ -78,6 +78,22 @@ test('если стереть номер короче минимума, резу
   expect(screen.queryByRole('button', { name: /CAFFARO/ })).not.toBeInTheDocument()
 })
 
+test('Enter ищет и по короткому номеру, автопоиск — нет', async () => {
+  const user = setup()
+  const input = screen.getByRole('textbox')
+
+  await user.type(input, '01')
+  await act(() => vi.advanceTimersByTimeAsync(1000))
+  expect(fetchMock).not.toHaveBeenCalled()
+
+  await user.type(input, '{Enter}')
+  await screen.findByRole('button', { name: /CAFFARO/ })
+  await user.type(input, ' ')
+  await act(() => vi.advanceTimersByTimeAsync(1000))
+  expect(fetchMock).toHaveBeenCalledTimes(1)
+  expect(screen.getByRole('button', { name: /CAFFARO/ })).toBeInTheDocument()
+})
+
 test('крестик очищает поле и результаты, пока поле пустое его нет', async () => {
   const user = setup()
   const input = screen.getByRole('textbox')
